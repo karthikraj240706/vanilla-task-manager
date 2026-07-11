@@ -5,93 +5,309 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vanilla Task Manager</title>
   <style>
-    /* Clean, modern styling */
+    /* Clean, modern styling from image_0.png */
     :root {
-      --bg-color: #f9fafb;
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e3a8a 25%, #7e22ce 50%, #22d3ee 75%, #0ea5e9 100%);
       --text-main: #111827;
-      --primary: #3b82f6;
       --border: #e5e7eb;
       --danger: #ef4444;
+      --accent-color: #1d4ed8; /* Dark Blue from the image */
+      --accent-bg: #1e3a8a; /* Dark blue background for buttons/icons */
     }
+
     body { 
       font-family: system-ui, -apple-system, sans-serif; 
-      background-color: var(--bg-color);
+      background: var(--bg-gradient);
       color: var(--text-main);
-      max-width: 500px; 
-      margin: 3rem auto; 
-      padding: 1.5rem; 
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      min-height: 100vh;
+      margin: 0; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
     }
-    h2 { margin-top: 0; color: var(--text-main); }
+
+    /* Card container centered on body */
+    .app-card {
+      background: white;
+      max-width: 500px;
+      width: 100%;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    h2 { margin-top: 0; color: var(--text-main); font-weight: 600; text-align: center;}
     
     /* Form & Input */
-    form { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+    form { display: flex; gap: 0.75rem; margin-bottom: 2rem; }
     input[type="text"] { 
       flex-grow: 1; 
       padding: 0.75rem; 
       border: 1px solid var(--border); 
-      border-radius: 4px; 
+      border-radius: 6px; 
       font-size: 1rem;
     }
-    button[type="submit"] {
-      background: var(--primary);
+    
+    .btn {
       color: white;
       border: none;
-      padding: 0.75rem 1rem;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
-      transition: background 0.2s;
+      transition: background 0.2s, color 0.2s;
     }
-    button[type="submit"]:hover { background: #2563eb; }
+
+    .btn-submit {
+      background: var(--accent-bg); /* Dark Blue from image_0.png */
+      padding: 0.75rem 1.25rem;
+    }
+    .btn-submit:hover { background: #1e40af; }
 
     /* Filters */
-    .filters { display: flex; gap: 0.5rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
-    .filter-btn { 
-      background: none; border: none; cursor: pointer; color: #6b7280; font-weight: 500; padding: 0.25rem 0.5rem;
+    .filters { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; justify-content: center;}
+    .btn-filter { 
+      background: #f3f4f6; 
+      border: 1px solid var(--border); 
+      color: #6b7280; 
+      padding: 0.4rem 0.75rem; 
     }
-    .filter-btn.active { color: var(--primary); font-weight: 700; border-bottom: 2px solid var(--primary); }
+    .btn-filter-active { 
+      background: var(--accent-bg); /* Dark Blue from image_0.png */
+      color: white;
+      border-color: var(--accent-bg);
+      font-weight: 700; 
+    }
 
     /* Task List */
-    ul { list-style: none; padding: 0; margin: 0; }
+    ul { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 2rem;}
     li { 
       display: flex; justify-content: space-between; align-items: center; 
       padding: 0.75rem 0; border-bottom: 1px solid var(--border); 
     }
     li:last-child { border-bottom: none; }
-    label { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; flex-grow: 1; }
-    input[type="checkbox"] { width: 1.25rem; height: 1.25rem; cursor: pointer; }
+    label { display: flex; align-items: center; gap: 1rem; cursor: pointer; flex-grow: 1; }
+    input[type="checkbox"] { width: 1.3rem; height: 1.3rem; cursor: pointer; }
     
     .completed span { text-decoration: line-through; color: #9ca3af; }
     
+    /* Clean, professional delete button placement */
     .delete-btn { 
-      background: var(--danger); color: white; border: none; cursor: pointer; 
-      padding: 0.4rem 0.75rem; border-radius: 4px; font-size: 0.875rem;
-      opacity: 0; transition: opacity 0.2s;
+      background: var(--danger); 
+      opacity: 0.1; /* Almost invisible until hover */
+      transition: opacity 0.2s;
     }
-    li:hover .delete-btn { opacity: 1; } /* Only show delete on hover for cleaner UI */
+    li:hover .delete-btn { opacity: 1; } 
+
+    /* New "Contact Me" Section Style */
+    .contact-section {
+      text-align: center;
+      padding-top: 1rem;
+    }
+    .contact-section h3 { margin-bottom: 1.5rem; font-weight: 600; }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+    .contact-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--accent-color); /* Deep blue/purple for consistency */
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .contact-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      fill: var(--accent-color); /* Deep blue/purple */
+    }
+
   </style>
 </head>
 <body>
 
-  <h2>Task Manager</h2>
-  
-  <form id="todo-form">
-    <input type="text" id="task-input" placeholder="What needs to be done?" required>
-    <button type="submit">Add Task</button>
-  </form>
+  <div class="app-card">
+    <h2>Vanilla Task Manager</h2>
+    
+    <form id="todo-form">
+      <input type="text" id="task-input" placeholder="Enter your task" required>
+      <button type="submit" class="btn btn-submit">Input</button>
+    </form>
 
-  <div class="filters" id="filters">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="active">Active</button>
-    <button class="filter-btn" data-filter="completed">Completed</button>
+    <div class="filters" id="filters">
+      <button class="btn btn-filter btn-filter-active" data-filter="all">All</button>
+      <button class="btn btn-filter" data-filter="active">Active</button>
+      <button class="btn btn-filter" data-filter="completed">Completed</button>
+    </div>
+
+    <ul id="todo-list"></ul>
+
+    <!-- New "Contact Me" Section as requested -->
+    <div class="contact-section">
+      <h3>Contact Me</h3>
+      <div class="contact-links">
+        
+        <!-- Replace href="#" with your actual links -->
+        <a href="mailto:your.email@example.com" class="contact-item" target="_blank" rel="noopener noreferrer">
+          <!-- Envelope Icon SVG -->
+          <svg class="contact-icon" viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 4l-8 5l-8-5V6l8 5l8-5v2Z"/></svg>
+          <span>Email Me</span>
+        </a>
+        
+        <a href="https://www.linkedin.com/in/your_linkedin_profile/" class="contact-item" target="_blank" rel="noopener noreferrer">
+          <!-- LinkedIn Icon SVG -->
+          <svg class="contact-icon" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77Z"/></svg>
+          <span>LinkedIn</span>
+        </a>
+        
+        <a href="https://www.instagram.com/your_instagram_profile/" class="contact-item" target="_blank" rel="noopener noreferrer">
+          <!-- Instagram Icon SVG -->
+          <svg class="contact-icon" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8a1.25 1.25 0 0 1-1.25-1.25a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5a5 5 0 0 1-5 5a5 5 0 0 1-5-5a5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3Z"/></svg>
+          <span>Instagram</span>
+        </a>
+
+      </div>
+    </div>
   </div>
 
-  <ul id="todo-list"></ul>
+  <!-- Full Application Logic (CRUD, Filtering, Persistence) -->
+  <script>
+    // ==========================================
+    // STATE MANAGEMENT
+    // ==========================================
+    
+    // Default initial tasks for demonstration, matched to image_0.png
+    const defaultTasks = [
+      { id: "1", text: "Emorand things list", completed: false },
+      { id: "2", text: "Check out for our appontation", completed: true },
+      { id: "3", text: "Check out prepared tasks", completed: false },
+      { id: "4", text: "Edik new management", completed: false },
+    ];
 
-  <!-- This links to the logic file we will create next -->
-  <script src="app.js"></script>
+    // Load from localStorage or use defaults
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || defaultTasks;
+    let currentFilter = 'all';
+
+    // ==========================================
+    // DOM ELEMENTS
+    // ==========================================
+    const form = document.getElementById('todo-form');
+    const taskInput = document.getElementById('task-input');
+    const todoList = document.getElementById('todo-list');
+    const filtersContainer = document.getElementById('filters');
+
+    // ==========================================
+    // CORE LOGIC & CRUD OPERATIONS
+    // ==========================================
+
+    function saveToStorage() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function renderTasks() {
+      todoList.innerHTML = ''; // Wipe and rebuild
+
+      const filteredTasks = tasks.filter(task => {
+        if (currentFilter === 'active') return !task.completed;
+        if (currentFilter === 'completed') return task.completed;
+        return true; 
+      });
+
+      filteredTasks.forEach(task => {
+        const li = document.createElement('li');
+        li.className = task.completed ? 'completed' : '';
+        li.dataset.id = task.id; 
+
+        li.innerHTML = `
+          <label>
+            <input type="checkbox" class="toggle-cb" ${task.completed ? 'checked' : ''}>
+            <span>${task.text}</span>
+          </label>
+          <button class="btn btn-danger delete-btn">Delete</button>
+        `;
+        
+        todoList.appendChild(li);
+      });
+    }
+
+    function addTask(text) {
+      const newTask = {
+        id: Date.now().toString(),
+        text: text,
+        completed: false
+      };
+      tasks.push(newTask);
+      saveAndRender();
+    }
+
+    function toggleTask(id) {
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        task.completed = !task.completed;
+        saveAndRender();
+      }
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(t => t.id !== id);
+      saveAndRender();
+    }
+
+    function saveAndRender() {
+      saveToStorage();
+      renderTasks();
+    }
+
+    // ==========================================
+    // EVENT LISTENERS
+    // ==========================================
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = taskInput.value.trim();
+      if (text !== '') {
+        addTask(text);
+        taskInput.value = ''; // Clear input field
+      }
+    });
+
+    // Event Delegation: Parent <ul> handles clicks for all dynamic items
+    todoList.addEventListener('click', (e) => {
+      const li = e.target.closest('li');
+      if (!li) return;
+      
+      const taskId = li.dataset.id;
+
+      if (e.target.classList.contains('delete-btn')) {
+        deleteTask(taskId);
+      }
+      
+      if (e.target.classList.contains('toggle-cb')) {
+        toggleTask(taskId);
+      }
+    });
+
+    filtersContainer.addEventListener('click', (e) => {
+      if (e.target.classList.contains('btn-filter')) {
+        // Update active UI styling
+        document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('btn-filter-active'));
+        e.target.classList.add('btn-filter-active');
+        
+        // Update state and re-render
+        currentFilter = e.target.dataset.filter;
+        renderTasks();
+      }
+    });
+
+    // ==========================================
+    // INITIALIZATION
+    // ==========================================
+    // Run the application when the script loads
+    renderTasks();
+  </script>
 </body>
 </html>
