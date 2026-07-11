@@ -19,26 +19,33 @@
       font-family: system-ui, -apple-system, sans-serif; 
       background: var(--bg-gradient);
       color: var(--text-main);
-      min-height: 100vh;
+      height: 100vh; /* Locked to exactly 100% of the screen height */
       margin: 0; 
       display: flex;
       justify-content: center;
-      align-items: center;
-      padding: 1.5rem;
+      align-items: center; /* Centers perfectly on all devices */
+      padding: 1rem;
+      box-sizing: border-box;
+      overflow: hidden; /* Prevents the whole page from scrolling */
     }
 
     .app-card {
       background: white;
       max-width: 500px;
       width: 100%;
-      padding: 2.5rem;
+      /* Responsive padding: smaller on mobile, larger on laptop */
+      padding: clamp(1.5rem, 5vw, 2.5rem);
       border-radius: 12px;
       box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      /* Keeps the card from getting taller than the screen */
+      max-height: 95vh;
+      display: flex;
+      flex-direction: column;
     }
 
     h2 { margin-top: 0; color: var(--text-main); font-weight: 600; text-align: center;}
     
-    form { display: flex; gap: 0.75rem; margin-bottom: 2rem; }
+    form { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-shrink: 0; }
     input[type="text"] { 
       flex-grow: 1; 
       padding: 0.75rem; 
@@ -59,7 +66,7 @@
     .btn-submit { background: var(--accent-bg); padding: 0.75rem 1.25rem; }
     .btn-submit:hover { background: #1e40af; }
 
-    .filters { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; justify-content: center;}
+    .filters { display: flex; gap: 0.75rem; margin-bottom: 1rem; justify-content: center; flex-shrink: 0;}
     .btn-filter { 
       background: #f3f4f6; border: 1px solid var(--border); color: #6b7280; padding: 0.4rem 0.75rem; 
     }
@@ -67,25 +74,44 @@
       background: var(--accent-bg); color: white; border-color: var(--accent-bg); font-weight: 700; 
     }
 
-    ul { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 2rem;}
+    /* Scrollable Task List */
+    ul { 
+      list-style: none; 
+      padding: 0; 
+      margin: 0 0 1.5rem 0; 
+      border-top: 1px solid var(--border); 
+      border-bottom: 1px solid var(--border); 
+      /* This makes the list scroll internally if there are too many tasks! */
+      overflow-y: auto; 
+      max-height: 35vh; 
+    }
+    
+    /* Scrollbar styling for a polished look */
+    ul::-webkit-scrollbar { width: 6px; }
+    ul::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+    ul::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+    ul::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+
     li { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
     li:last-child { border-bottom: none; }
     label { display: flex; align-items: center; gap: 1rem; cursor: pointer; flex-grow: 1; }
-    input[type="checkbox"] { width: 1.3rem; height: 1.3rem; cursor: pointer; }
+    input[type="checkbox"] { width: 1.3rem; height: 1.3rem; cursor: pointer; flex-shrink: 0; }
     
     .completed span { text-decoration: line-through; color: #9ca3af; }
     
-    .delete-btn { background: var(--danger); opacity: 0.1; transition: opacity 0.2s; }
+    .delete-btn { background: var(--danger); opacity: 0.1; transition: opacity 0.2s; padding: 0.4rem 0.75rem; }
     li:hover .delete-btn { opacity: 1; } 
+    /* Force delete button to show on mobile devices where there is no mouse to 'hover' */
+    @media (hover: none) { .delete-btn { opacity: 1; } }
 
-    .contact-section { text-align: center; padding-top: 1rem; }
-    .contact-section h3 { margin-bottom: 1.5rem; font-weight: 600; }
+    .contact-section { text-align: center; padding-top: 0.5rem; flex-shrink: 0; }
+    .contact-section h3 { margin-top: 0; margin-bottom: 1.25rem; font-weight: 600; }
     .contact-links { display: flex; justify-content: center; gap: 2.5rem; }
     .contact-item {
-      display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
-      color: var(--accent-color); text-decoration: none; font-weight: 600; font-size: 0.9rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      color: var(--accent-color); text-decoration: none; font-weight: 600; font-size: 0.85rem;
     }
-    .contact-icon { width: 2.5rem; height: 2.5rem; fill: var(--accent-color); }
+    .contact-icon { width: 2.2rem; height: 2.2rem; fill: var(--accent-color); }
   </style>
 </head>
 <body>
@@ -112,19 +138,16 @@
       <div class="contact-links">
         
         <a href="mailto:karthik24706raj@gmail.com" class="contact-item" target="_blank" rel="noopener noreferrer">
-          <!-- Envelope Icon -->
           <svg class="contact-icon" viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 4l-8 5l-8-5V6l8 5l8-5v2Z"/></svg>
           <span>Email Me</span>
         </a>
         
         <a href="https://github.com/karthikraj240706" class="contact-item" target="_blank" rel="noopener noreferrer">
-          <!-- GitHub Icon -->
           <svg class="contact-icon" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5c.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34c-.46-1.16-1.11-1.47-1.11-1.47c-.91-.62.07-.6.07-.6c1 .07 1.53 1.03 1.53 1.03c.87 1.52 2.34 1.07 2.91.83c.09-.65.35-1.09.63-1.34c-2.22-.25-4.55-1.11-4.55-4.92c0-1.11.38-2 1.03-2.71c-.1-.25-.45-1.29.1-2.64c0 0 .84-.27 2.75 1.02c.79-.22 1.65-.33 2.5-.33c.85 0 1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02c.55 1.35.2 2.39.1 2.64c.65.71 1.03 1.6 1.03 2.71c0 3.82-2.34 4.66-4.57 4.91c.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/></svg>
           <span>GitHub</span>
         </a>
         
         <a href="https://www.instagram.com/karthikraj24_/" class="contact-item" target="_blank" rel="noopener noreferrer">
-          <!-- Instagram Icon -->
           <svg class="contact-icon" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8a1.25 1.25 0 0 1-1.25-1.25a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5a5 5 0 0 1-5 5a5 5 0 0 1-5-5a5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3Z"/></svg>
           <span>Instagram</span>
         </a>
@@ -134,14 +157,8 @@
   </div>
 
   <script>
-    const defaultTasks = [
-      { id: "1", text: "Emorand things list", completed: false },
-      { id: "2", text: "Check out for our appontation", completed: true },
-      { id: "3", text: "Check out prepared tasks", completed: false },
-      { id: "4", text: "Edik new management", completed: false },
-    ];
-
-    let tasks = JSON.parse(localStorage.getItem('tasks')) || defaultTasks;
+    // Changed the storage key so it ignores the old defaults and starts completely empty!
+    let tasks = JSON.parse(localStorage.getItem('my-clean-tasks')) || [];
     let currentFilter = 'all';
 
     const form = document.getElementById('todo-form');
@@ -149,7 +166,7 @@
     const todoList = document.getElementById('todo-list');
     const filtersContainer = document.getElementById('filters');
 
-    function saveToStorage() { localStorage.setItem('tasks', JSON.stringify(tasks)); }
+    function saveToStorage() { localStorage.setItem('my-clean-tasks', JSON.stringify(tasks)); }
 
     function renderTasks() {
       todoList.innerHTML = ''; 
